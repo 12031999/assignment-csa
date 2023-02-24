@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Update Image Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      form {
+        margin: 20px 0;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input, textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-bottom: 10px;
+      }
+      button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #3e8e41;
+      }
+      img {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Update Image Details</h1>
+    <form onsubmit="updateImageDetails();">
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" value="">
+      
+      <label for="description">Description:</label>
+      <textarea id="description" name="description"></textarea>
+      
+      <label for="tags">Tags:</label>
+      <input type="text" id="tags" name="tags" value="">
+      
+      <label for="image">Image:</label>
+      <input type="file" id="image" name="image" accept="image/*">
+      
+      
+      <button type="submit">Update</button>
+    </form>
+    
+    <script>
+  const titleInput = document.getElementById('title');
+  const descriptionInput = document.getElementById('description');
+  const tagsInput = document.getElementById('tags');
+  const imageInput = document.getElementById('image');
+  
+  // pre-fill form fields with stored values
+  const title = localStorage.getItem('title');
+  const description = localStorage.getItem('description');
+  const tags = localStorage.getItem('tags');
+  const imageData = localStorage.getItem('image');
+  titleInput.value = title;
+  descriptionInput.value = description;
+  tagsInput.value = tags;
+  if (imageData) {
+    const img = document.createElement('img');
+    img.src = imageData;
+    document.body.appendChild(img);
+  }
+
+  // handle form submission
+  const form = document.querySelector('form');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault(); // prevent form from submitting normally
+    const updatedTitle = titleInput.value;
+    const updatedDescription = descriptionInput.value;
+    const updatedTags = tagsInput.value;
+    const updatedImage = imageInput.files[0];
+    
+    // store updated values in local storage
+    localStorage.setItem('title', updatedTitle);
+    localStorage.setItem('description', updatedDescription);
+    localStorage.setItem('tags', updatedTags);
+    const reader = new FileReader();
+    reader.readAsDataURL(updatedImage);
+    reader.onload = () => {
+      const imageDataURL = reader.result;
+      localStorage.setItem('image', imageDataURL);
+    };
+    
+    // redirect to image-details page with updated values
+    const url = `image-details.html?title=${encodeURIComponent(updatedTitle)}&description=${encodeURIComponent(updatedDescription)}&tags=${encodeURIComponent(updatedTags)}&image=${encodeURIComponent(URL.createObjectURL(updatedImage))}`;
+    window.location.href = url;
+  });
+</script>
+  </body>
+</html>
