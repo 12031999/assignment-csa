@@ -45,7 +45,7 @@
   </head>
   <body>
     <h1>Image Details</h1>
-    <table id="image-table">
+    <table>
       <tr>
         <th>Title</th>
         <th>Description</th>
@@ -53,57 +53,49 @@
         <th>Image</th>
         <th>Action</th>
       </tr>
+      <tr>
+        <td id="title"></td>
+        <td id="description"></td>
+        <td id="tags"></td>
+        <td id="image"></td>
+        <td>
+          <button id="update-button" class="button">Update</button>
+          <button id="delete-button" class="button button-danger">Delete</button>
+        </td>
+      </tr>
     </table>
     <button id="new-image-button" class="button">New Image</button>
     <script>
-        function addImageToTable(title, description, tags, imageData) {
-          console.log('Adding image to table:', title, description, tags, imageData);
-          const table = document.getElementById('image-table');
-          const row = table.insertRow(-1);
-          const titleCell = row.insertCell(0);
-          const descriptionCell = row.insertCell(1);
-          const tagsCell = row.insertCell(2);
-          const imageCell = row.insertCell(3);
-          const actionCell = row.insertCell(4);
-      
-          titleCell.textContent = title;
-          descriptionCell.textContent = description;
-          tagsCell.textContent = tags;
-          const img = document.createElement('img');
-          img.src = imageData;
-          imageCell.appendChild(img);
-      
-          const updateButton = document.createElement('button');
-          updateButton.className = 'button';
-          updateButton.textContent = 'Update';
-          updateButton.addEventListener('click', () => {
-            const url = `update.html?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&tags=${encodeURIComponent(tags)}&image=${encodeURIComponent(imageData)}`;
-            window.location.href = url;
-          });
-          actionCell.appendChild(updateButton);
-      
-          const deleteButton = document.createElement('button');
-          deleteButton.className = 'button button-danger';
-          deleteButton.textContent = 'Delete';
-          deleteButton.addEventListener('click', () => {
-            row.remove();
-          });
-          actionCell.appendChild(deleteButton);
-        }
-      
-        const newImageButton = document.getElementById('new-image-button');
-        newImageButton.addEventListener('click', () => {
-          window.location.href = 'UI_Media_Sharing.html';
-        });
-      
-        const urlParams = new URLSearchParams(window.location.search);
-        const title = urlParams.get('title');
-        const description = urlParams.get('description');
-        const tags = urlParams.get('tags');
-        const imageData = urlParams.get('image');
-        if (title && description && tags && imageData) {
-          addImageToTable(title, description, tags, imageData);
-        }
-      </script>
-  </body>  
+      const title = localStorage.getItem('title');
+      const description = localStorage.getItem('description');
+      const tags = localStorage.getItem('tags');
+      const imageData = localStorage.getItem('image');
+
+      document.getElementById('title').textContent = title;
+      document.getElementById('description').textContent = description;
+      document.getElementById('tags').textContent = tags;
+      const img = document.createElement('img');
+      img.src = imageData;
+      document.getElementById('image').appendChild(img);
+
+      const updateButton = document.getElementById('update-button');
+      updateButton.addEventListener('click', () => {
+        window.location.href = 'update.html';
+      });
+
+      const deleteButton = document.getElementById('delete-button');
+      deleteButton.addEventListener('click', () => {
+        localStorage.removeItem('title');
+        localStorage.removeItem('description');
+        localStorage.removeItem('tags');
+        localStorage.removeItem('image');
+        window.location.href = 'image-details.html';
+      });
+
+      const newImageButton = document.getElementById('new-image-button');
+      newImageButton.addEventListener('click', () => {
+        window.location.href = 'Image_Sharing.html';
+      });
+    </script>
+  </body>
 </html>
